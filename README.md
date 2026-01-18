@@ -1,95 +1,71 @@
-# Prograde Pathfinder – Emdex Labs Website
+# Emdex Labs
 
-## Overview
-A modern, premium‑looking static website for **Emdex Labs** showcasing services in AI, Robotics, Cloud Computing, and more. The site features:
-- A custom circuit‑style logo used consistently in the navbar and footer.
-- Prominent navigation tabs with clear active/inactive states.
-- Smooth, GPU‑accelerated animations and scroll‑jank‑free performance.
-- Full accessibility support (ARIA roles, skip‑to‑content link, reduced‑motion handling, focus outlines).
-- Responsive design built with **Next.js 16**, **Tailwind CSS**, **Framer Motion**, and **Lucide‑React** icons.
+**Intelligent Systems for the Digital Future.**
 
-## Tech Stack
-- **Framework**: Next.js (App Router) – React 18
-- **Styling**: Tailwind CSS (custom utilities, dark‑mode disabled per design)
-- **Animations**: Framer Motion
-- **Icons**: lucide‑react
-- **Fonts**: Inter (via `next/font/google`)
-- **Language**: TypeScript (tsx)
+Emdex Labs is a premier technology provider specializing in high-performance solutions for **AI, Robotics, Cloud Computing, and IoT**. This repository contains the modern, production-ready frontend for our digital presence.
 
-## Getting Started
+## 🚀 Overview
+
+Built with precision and performance in mind, this application serves as the digital face of Emdex Labs. It features a cinematic, data-driven aesthetic designed to communicate trust and technical expertise.
+
+### Key Features
+-   **Cinematic Experience**: Immersive dark-mode design with smooth, GPU-accelerated animations (Framer Motion).
+-   **High Performance**: Built on Next.js 16 (App Router) for optimal speed and SEO.
+-   **Fully Responsive**: Adaptive layouts for Mobile, Tablet, and Desktop.
+-   **Accessible**: WAI-ARIA compliant navigation and interactive elements.
+-   **Modular Architecture**: Component-driven design for scalability.
+
+## 🛠️ Tech Stack
+
+-   **Framework**: [Next.js 16](https://nextjs.org/) (React 19 RC)
+-   **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+-   **Animation**: [Framer Motion](https://www.framer.com/motion/)
+-   **Icons**: [Lucide React](https://lucide.dev/)
+-   **Language**: TypeScript
+
+## 📦 Getting Started
+
 ### Prerequisites
-- Node.js >= 18
-- npm (comes with Node) or Yarn
+-   Node.js 18+
+-   npm / yarn / pnpm
 
-### Clone the Repository
+### Installation
+
 ```bash
+# Clone the repository
 git clone https://github.com/emdexlabs/e-frontend.git
 cd e-frontend
-```
 
-### Install Dependencies
-```bash
+# Install dependencies
 npm install
-# or yarn install
 ```
 
-### Development Server
+### Development
+
 ```bash
 npm run dev
+# Server running at http://localhost:3000
 ```
-Open `http://localhost:3000` in your browser. The dev server supports hot‑reloading.
 
-### Build for Production
+### Production Build
+
 ```bash
-npm run build   # creates an optimized static build
-npm start       # runs the production server
+npm run build
+npm start
 ```
 
-## Project Structure (key folders)
+## 📂 Project Structure
+
 ```
 src/
-├─ app/               # Next.js app router (layout, globals.css, pages)
-│   ├─ layout.tsx      # Root layout with global font imports and skip‑link
-│   └─ globals.css     # Tailwind + custom utilities, performance tweaks
-├─ components/        # Reusable UI components
-│   ├─ Navbar.tsx          # Header with logo, navigation tabs, mobile menu
-│   ├─ Footer.tsx          # Footer using shared Logo component
-│   ├─ Logo.tsx            # Circuit‑style logo (SVG) used in Navbar & Footer
-│   ├─ HeroCarousel.tsx    # Hero section with animated slides
-│   ├─ AboutSection.tsx    # About Us section with team details
-│   ├─ ContactForm.tsx     # Contact form component
-│   ├─ IndustryGrid.tsx    # Grid layout for industry sectors
-│   ├─ ServicesAccordion.tsx # Accordion for services offered
-│   ├─ TeamExpertise.tsx   # Team expertise display
-│   └─ ui/                 # Shared UI primitives
-└─ public/            # Static assets (images, favicons)
+├── app/                 # Next.js App Router (Layouts, Pages)
+├── components/          # React Components
+│   ├── ui/              # Shared UI Primitives
+│   ├── HeroCarousel.tsx # Landing Hero Section
+│   ├── IndustryGrid.tsx # Interactive Industry Showcase
+│   └── ...
+└── public/              # Static Assets
 ```
 
-## Scripts Overview
-| Script | Description |
-|--------|-------------|
-| `dev` | Starts the Next.js development server |
-| `build` | Generates a production‑ready static build |
-| `start` | Runs the production server after `build` |
-| `lint` | Runs ESLint & Tailwind linting |
-| `format` | Runs Prettier to format code |
-
-## Accessibility Highlights
-- **Skip to content** link (`.skip-to-content`) for keyboard users.
-- ARIA roles/labels on navigation, tabs, menus, and interactive elements.
-- `prefers-reduced-motion` media query disables heavy animations for motion‑sensitive users.
-- Focus-visible outlines (`outline: 2px solid var(--primary)`).
-
-## Customization
-- **Logo**: Edit `src/components/Logo.tsx` to replace the circuit SVG with a new design.
-- **Color palette**: Adjust CSS variables in `globals.css` (`--primary`, `--secondary`, etc.).
-- **Typography**: Change the Inter font import in `src/app/layout.tsx`.
-
-## Contributing
-1. Fork the repo.
-2. Create a feature branch (`git checkout -b feature/awesome‑feature`).
-3. Make your changes and ensure `npm run lint` passes.
-4. Submit a Pull Request.
-
-## License
-MIT – feel free to use and adapt for your own projects.
+## 📄 License
+© Emdex Labs. All rights reserved.

@@ -1,207 +1,277 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Mail, MapPin } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Logo from "./Logo";
 
 const navItems = [
   { name: "Home", href: "#home" },
-  { name: "About Us", href: "#about" },
+  { name: "What we do", href: "#team-expertise" },
   { name: "Industry", href: "#industry" },
-  { name: "Innovation", href: "#innovation" },
-  { name: "Contact Us", href: "#contact" },
+  { name: "About", href: "#about" },
+  { name: "Contact", href: "#contact" },
 ];
-
-// Debounce utility for scroll performance
-function debounce<T extends (...args: unknown[]) => void>(
-  func: T,
-  wait: number
-): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout | null = null;
-  return (...args: Parameters<T>) => {
-    if (timeout) clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), wait);
-  };
-}
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
-  const rafRef = useRef<number | null>(null);
 
-  // Optimized scroll handler with RAF
-  const handleScroll = useCallback(() => {
-    if (rafRef.current) {
-      cancelAnimationFrame(rafRef.current);
+  const isScrollingRef = useRef(false);
+
+  // Body Scroll Lock when Menu is Open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
     }
-
-    rafRef.current = requestAnimationFrame(() => {
-      setScrolled(window.scrollY > 20);
-      
-      // Determine active section based on scroll position
-      const sections = navItems.map(item => item.href.substring(1));
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 150 && rect.bottom >= 150) {
-            setActiveSection(section);
-            break;
-          }
-        }
-      }
-    });
-  }, []);
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
 
   useEffect(() => {
-    // Debounced scroll handler for performance
-    const debouncedScroll = debounce(handleScroll, 10);
-    
-    window.addEventListener("scroll", debouncedScroll, { passive: true });
-    handleScroll(); // Initial check
-    
-    return () => {
-      window.removeEventListener("scroll", debouncedScroll);
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
     };
-  }, [handleScroll]);
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    // Precise Center-Line Intersection Observer
+    const options = {
+      root: null,
+      rootMargin: "-45% 0px -45% 0px", // Active when element hits center of screen
+      threshold: 0,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      if (isScrollingRef.current) return;
+
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    }, options);
+
+    navItems.forEach((item) => {
+      const id = item.href.substring(1);
+      const element = document.getElementById(id);
+      if (element) observer.observe(element);
+    });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      observer.disconnect();
+    };
+  }, []);
+
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
     e.preventDefault();
     const targetId = href.substring(1);
     const element = document.getElementById(targetId);
-    
+
     if (element) {
-      const offset = 100; // Navbar height + padding
+      isScrollingRef.current = true;
+      setActiveSection(targetId);
+
+      const offset = 85;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - offset;
 
       window.scrollTo({
         top: offsetPosition,
-        behavior: "smooth"
+        behavior: "smooth",
       });
-      
-      // Update active section immediately for better UX
-      setActiveSection(targetId);
+
+      // Unlock observer after animation
+      setTimeout(() => {
+        isScrollingRef.current = false;
+      }, 800);
     }
-    
     setIsOpen(false);
   };
 
   return (
-    <nav
-      className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 will-change-transform",
-        scrolled
-          ? "bg-white/95 backdrop-blur-lg shadow-lg py-3"
-          : "bg-white/90 backdrop-blur-md py-4 shadow-md"
-      )}
-      role="navigation"
-      aria-label="Main navigation"
-    >
-      <div className="container mx-auto px-4 md:px-8 flex items-center justify-between">
-        {/* Logo */}
-        <Link 
-          href="/" 
-          className="hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-[#6D8196] rounded-lg"
-          aria-label="Emdex Labs Home"
-        >
-          <Logo iconSize={44} />
-        </Link>
+    <>
+      <nav
+        className={cn(
+          "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b",
+          scrolled
+            ? "bg-white/95 backdrop-blur-md shadow-sm border-gray-200/50 py-3"
+            : "bg-white/50 backdrop-blur-sm border-transparent py-5",
+        )}
+        role="navigation"
+      >
+        <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
+          {/* Logo */}
+          <Link
+            href="/"
+            className="relative z-50 hover:opacity-80 transition-opacity"
+            aria-label="Emdex Labs Home"
+            onClick={(e) => handleNavClick(e, "#home")}
+          >
+            <Logo iconSize={40} textColor="text-foreground" />
+          </Link>
 
-        {/* Desktop Navigation - Prominent Tabs */}
-        <div 
-          className="hidden md:flex items-center gap-1"
-          role="tablist"
-          aria-label="Page sections"
-        >
-          {navItems.map((item) => {
-            const isActive = activeSection === item.href.substring(1);
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                onClick={(e) => handleNavClick(e, item.href)}
-                role="tab"
-                aria-selected={isActive}
-                aria-current={isActive ? "page" : undefined}
-                className={cn(
-                  "relative px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#6D8196] focus:ring-offset-2",
-                  isActive
-                    ? "text-[#6D8196]"
-                    : "text-[#4A4A4A]/70 hover:text-[#6D8196]"
-                )}
-              >
-                {isActive && (
-                  <motion.div
-                    layoutId="activeTab"
-                    className="absolute inset-0 bg-white rounded-full shadow-[0_4px_20px_rgba(109,129,150,0.15)] border border-[#6D8196]/10 -z-10"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    style={{ willChange: "transform" }}
-                  />
-                )}
-                <span className="relative z-10">{item.name}</span>
-              </Link>
-            );
-          })}
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-1">
+            {navItems.map((item) => {
+              const isActive = activeSection === item.href.substring(1);
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={(e) => handleNavClick(e, item.href)}
+                  className={cn(
+                    "relative px-4 py-2 text-sm font-semibold rounded-full transition-all duration-200",
+                    isActive
+                      ? "text-primary bg-primary/10"
+                      : "text-muted-foreground hover:text-primary hover:bg-primary/5",
+                  )}
+                >
+                  <span>{item.name}</span>
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Contact Button (Desktop) */}
+          <div className="hidden md:block">
+            <Link
+              href="#contact"
+              onClick={(e) => handleNavClick(e, "#contact")}
+              className="px-6 py-2.5 bg-primary text-primary-foreground text-sm font-semibold rounded-full shadow-md hover:shadow-lg hover:bg-primary/90 transition-all transform hover:-translate-y-0.5 active:translate-y-0"
+            >
+              Get Started
+            </Link>
+          </div>
+
+          {/* Mobile Menu Toggle Button */}
+          <button
+            className={cn(
+              "md:hidden p-2 rounded-full transition-colors relative z-50",
+              scrolled
+                ? "text-foreground hover:bg-gray-100"
+                : "text-foreground hover:bg-white/50", // Always visible foreground in glass mode
+            )}
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {/* If menu is open, this button is covered by the overlay, which has its own close button. 
+                But if we wanted this to persist, we'd need z-[101]. 
+                We'll stick to 'Menu' icon here mostly. */}
+            <Menu size={24} />
+          </button>
         </div>
+      </nav>
 
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden p-2.5 hover:bg-[#FEEEE3] rounded-lg transition-colors text-[#4A4A4A] focus:outline-none focus:ring-2 focus:ring-[#6D8196]"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label={isOpen ? "Close menu" : "Open menu"}
-          aria-expanded={isOpen}
-          aria-controls="mobile-menu"
-        >
-          {isOpen ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
-        </button>
-      </div>
-
-      {/* Mobile Navigation */}
+      {/* Mobile Navigation Overlay */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            id="mobile-menu"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden bg-white border-t border-[#CBCBCB]/30"
-            role="menu"
-            aria-label="Mobile navigation"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-100 bg-white flex flex-col md:hidden"
           >
-            <div className="flex flex-col p-4 gap-2">
-              {navItems.map((item) => {
-                const isActive = activeSection === item.href.substring(1);
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={(e) => handleNavClick(e, item.href)}
-                    role="menuitem"
-                    aria-current={isActive ? "page" : undefined}
-                    className={cn(
-                      "px-4 py-3 text-base font-bold rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-[#6D8196]",
-                      isActive
-                        ? "bg-gradient-to-r from-[#6D8196] to-[#5A6B7E] text-white shadow-md"
-                        : "text-[#4A4A4A] hover:bg-[#FEEEE3] hover:text-[#6D8196]"
-                    )}
-                  >
-                    {item.name}
-                  </Link>
-                );
-              })}
+            {/* Header: Logo & Close */}
+            <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+              <Logo iconSize={32} textColor="text-foreground" />
+              <button
+                onClick={() => setIsOpen(false)}
+                className="p-2 rounded-full bg-gray-50 hover:bg-gray-100 text-foreground transition-colors"
+              >
+                <X size={24} />
+              </button>
             </div>
+
+            {/* Main Menu Content */}
+            <div className="flex-1 flex flex-col justify-center px-8">
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: {
+                    opacity: 1,
+                    transition: {
+                      staggerChildren: 0.1,
+                      delayChildren: 0.1,
+                    },
+                  },
+                }}
+                className="flex flex-col gap-6"
+              >
+                {navItems.map((item, idx) => {
+                  const isActive = activeSection === item.href.substring(1);
+                  return (
+                    <motion.div
+                      key={item.name}
+                      variants={{
+                        hidden: { opacity: 0, x: -20 },
+                        visible: { opacity: 1, x: 0 },
+                      }}
+                    >
+                      <Link
+                        href={item.href}
+                        onClick={(e) => handleNavClick(e, item.href)}
+                        className="group flex items-center gap-4"
+                      >
+                        <span
+                          className={cn(
+                            "text-sm font-mono font-medium transition-colors",
+                            isActive
+                              ? "text-primary"
+                              : "text-gray-300 group-hover:text-primary/50",
+                          )}
+                        >
+                          {(idx + 1).toString().padStart(2, "0")}
+                        </span>
+                        <span
+                          className={cn(
+                            "text-3xl md:text-4xl font-bold tracking-tight transition-colors",
+                            isActive
+                              ? "text-foreground"
+                              : "text-gray-400 group-hover:text-foreground",
+                          )}
+                        >
+                          {item.name}
+                        </span>
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+              </motion.div>
+            </div>
+
+            {/* Footer Info */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="p-8 bg-gray-50 border-t border-gray-100"
+            >
+              <div className="flex flex-col gap-4 text-sm text-muted-foreground">
+                <div className="flex items-center gap-3">
+                  <Mail size={16} className="text-primary" />
+                  <span>contact@emdexlabs.com</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <MapPin size={16} className="text-primary" />
+                  <span>Bengaluru, India</span>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </nav>
+    </>
   );
 }

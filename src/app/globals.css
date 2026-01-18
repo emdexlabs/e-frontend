@@ -13,24 +13,37 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
-
+/* 
+  ======================================================================
+  🎨 DESIGN SYSTEM - CENTRAL CONTROL PANEL
+  ======================================================================
+  Change the hex codes below to update the application's color theme globally.
+  Refer to DESIGN_SYSTEM.md in the root folder for detailed usage logic.
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #4A4A4A; /* Dark Gray - Primary text */
-  --primary: #6D8196; /* Blue-Gray - Primary interactive */
+  /* MAIN BACKGROUNDS */
+  --background: #f3f2ef; /* WARM GREY WASH - Comfortable reading surface */
+  --foreground: #191919; /* OFF-BLACK - Softer than pure black */
+
+  /* ACCENTS & INTERACTIONS */
+  --primary: #0a66c2; /* BRAND BLUE - Professional & authoritative */
   --primary-foreground: #ffffff;
-  --secondary: #FEEEE3; /* Warm Beige - Accent backgrounds */
-  --secondary-foreground: #4A4A4A; /* Dark Gray */
-  --accent: #6D8196; /* Blue-Gray */
-  --accent-foreground: #ffffff;
-  --border: #CBCBCB; /* Light Gray - Borders */
+
+  /* COMPONENT SURFACES */
+  --secondary: #ffffff; /* PURE WHITE - Cards & Feeds */
+  --secondary-foreground: #666666; /* MEDIUM GREY - Timestamps/Meta */
+
+  /* UTILITY COLORS */
+  --accent: #eef3f8; /* PALE BLUE WASH - Hover states */
+  --accent-foreground: #0a66c2;
+  --border: #e0e0e0; /* SUBTLE DIVIDERS */
 }
 
 /* Enforce light mode overrides even if system is dark, per user request */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #ffffff;
-    --foreground: #4A4A4A;
+    --foreground: #4a4a4a;
   }
 }
 
@@ -94,7 +107,6 @@ html {
 }
 
 body {
-  background: linear-gradient(to bottom, #FEEEE3 0%, #ffffff 30%, #FEEEE3 100%);
   background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
@@ -105,7 +117,7 @@ body {
 
 /* Subtle noise texture for depth */
 body::before {
-  content: '';
+  content: "";
   position: fixed;
   top: 0;
   left: 0;
@@ -118,7 +130,12 @@ body::before {
 }
 
 /* Improved Typography */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   line-height: 1.2;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -129,31 +146,11 @@ p {
 }
 
 /* Custom Utilities */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid #CBCBCB;
-}
 
 .container-width {
   @apply max-w-7xl mx-auto px-4 md:px-6 lg:px-8;
 }
 
 .section-padding {
-  @apply py-16 md:py-24 lg:py-32;
-}
-
-/* Section alternate background with optimized gradients */
-.section-alt {
-  background: linear-gradient(to bottom, rgba(254, 238, 227, 0.3), rgba(255, 255, 255, 0.5));
-  position: relative;
-}
-
-.section-alt::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle at 20% 50%, rgba(109, 129, 150, 0.05) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 80%, rgba(254, 238, 227, 0.3) 0%, transparent 50%);
-  pointer-events: none;
+  @apply py-12 md:py-16 lg:py-20;
 }
