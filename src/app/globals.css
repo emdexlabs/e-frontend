@@ -1,0 +1,281 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-jetbrains-mono);
+  --font-body: var(--font-inter);
+}
+
+/* 
+  ======================================================================
+  🌌 EMDEX LABS - LINEAR-GREPTILE SYSTEM
+  ======================================================================
+  Premium Engineering Product.
+*/
+
+:root {
+  /* LIGHT MODE - Crisp, Technical, 'Linear-like' */
+  --background: #ffffff;
+  --foreground: #0a0a0b;
+
+  --card: #f7f7f8; /* Slightly off-white for contrast */
+  --card-foreground: #0a0a0b;
+
+  --popover: #ffffff;
+  --popover-foreground: #0a0a0b;
+
+  --primary: #000000; /* Distinct Black in light mode */
+  --primary-foreground: #ffffff;
+
+  --secondary: #f2f2f3;
+  --secondary-foreground: #111111;
+
+  --muted: #f4f4f5; /* Zinc 100 - slightly darker than pure white */
+  --muted-foreground: #52525b; /* Zinc 600 - High contrast grey for readability */
+
+  --accent: #f4f4f5;
+  --accent-foreground: #111111;
+
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  
+  --success: #16a34a;
+
+  --border: #d4d4d8; /* Zinc 300 - Crisper borders */
+  --input: #d4d4d8;
+  --ring: #000000;
+  
+  --radius: 0.5rem; /* 8px default */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* DARK MODE - 'Visionary Architect' */
+    --background: #0a0a0b; /* Deep Matte Black */
+    --foreground: #ffffff;
+
+    --card: #161618; /* Dark Slate Surface */
+    --card-foreground: #ffffff;
+
+    --popover: #0a0a0b;
+    --popover-foreground: #ffffff;
+
+    --primary: #00f5ff; /* Electric Cyan */
+    --primary-foreground: #000000;
+
+    --secondary: #161618;
+    --secondary-foreground: #ffffff;
+
+    --muted: #222224;
+    --muted-foreground: #a1a1aa; /* Zinc 400 */
+
+    --accent: #222224;
+    --accent-foreground: #ffffff;
+
+    --destructive: #7f1d1d;
+    --destructive-foreground: #ffffff;
+    
+    --success: #adff2f; /* Lime Green */
+
+    --border: #27272a; 
+    --input: #27272a;
+    --ring: #00f5ff;
+  }
+}
+
+.dark {
+    /* DARK MODE - 'Visionary Architect' - Class Override */
+    --background: #0a0a0b; /* Deep Matte Black */
+    --foreground: #ffffff;
+
+    --card: #161618; /* Dark Slate Surface */
+    --card-foreground: #ffffff;
+
+    --popover: #0a0a0b;
+    --popover-foreground: #ffffff;
+
+    --primary: #00f5ff; /* Electric Cyan */
+    --primary-foreground: #000000;
+
+    --secondary: #161618;
+    --secondary-foreground: #ffffff;
+
+    --muted: #222224;
+    --muted-foreground: #a1a1aa; /* Zinc 400 */
+
+    --accent: #222224;
+    --accent-foreground: #ffffff;
+
+    --destructive: #7f1d1d;
+    --destructive-foreground: #ffffff;
+    
+    --success: #adff2f; /* Lime Green */
+
+    --border: #27272a; 
+    --input: #27272a;
+    --ring: #00f5ff;
+}
+
+/* Base resets */
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), sans-serif;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 
+  NOISE TEXTURE OVERLAY 
+  Simulates physical "lab" material quality 
+*/
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.02; /* Updated spec: 0.02 */
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Typography Hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+}
+
+/* Tech Labels - Updated Specs */
+.font-mono {
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 11px; /* Enforced 11px */
+}
+
+/* Selection Color */
+::selection {
+  background-color: rgba(0, 245, 255, 0.2);
+  color: var(--primary);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--muted);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* 
+  Border Gradient Utility
+  1px solid, gradient from #FFFFFF1A (top-left) to #FFFFFF00 (bottom-right)
+  Implemented via mask or pseudo-element for best support
+*/
+.border-linear {
+  position: relative;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  /* Defining the background color of the element */
+  background-color: var(--card); 
+}
+
+.border-linear::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit; 
+  padding: 1px; /* border width */
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%); 
+  -webkit-mask: 
+     linear-gradient(#fff 0 0) content-box, 
+     linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Fallback/Simpler version using border-image if mask is tricky, 
+   but mask is better for rounded corners. 
+   Alternatively, use the background stacking trick.
+*/
+.border-gradient-precise {
+  border: 1px solid transparent; /* Reserve space */
+  border-radius: 8px; /* Spec */
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  background-image: 
+    linear-gradient(var(--card), var(--card)), /* Inner Fill */
+    linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%); /* Border Gradient */
+}
+
+/* Light mode overrides for the border gradient */
+@media (prefers-color-scheme: light) {
+  .border-gradient-precise {
+     background-image: 
+      linear-gradient(var(--card), var(--card)),
+      linear-gradient(135deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
+  }
+}
+
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  padding: 8px 16px;
+  z-index: 100;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* Restored & Enhanced Utilities */
+.container-width {
+  @apply max-w-7xl mx-auto px-6 md:px-8 lg:px-12;
+}
+
+.section-padding {
+  @apply py-20 md:py-24 lg:py-32;
+}
